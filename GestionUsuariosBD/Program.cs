@@ -24,6 +24,10 @@ namespace GestionUsuariosBD
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			
+			// Inicializar la base de datos (crear tabla si no existe)
+            DatabaseHelper.InicializarBaseDatos();
+            
 			Application.Run(new MainForm());
 		}
 		
