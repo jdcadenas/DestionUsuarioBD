@@ -1,0 +1,9 @@
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\obj\Debug\GestionUsuariosBD.csprojResolveAssemblyReference.cache
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\obj\Debug\GestionUsuariosBD.FormUsuario.resources
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\obj\Debug\GestionUsuariosBD.csproj.GenerateResource.Cache
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\bin\Debug\GestionUsuariosBD.exe
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\bin\Debug\GestionUsuariosBD.pdb
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\bin\Debug\System.Data.SQLite.dll
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\obj\Debug\GestionUsuariosBD.exe
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\obj\Debug\GestionUsuariosBD.pdb
+C:\Users\jdcad\Documents\SharpDevelop Projects\GestionUsuariosBD\GestionUsuariosBD\bin\Debug\GestionUsuariosBD.exe.config

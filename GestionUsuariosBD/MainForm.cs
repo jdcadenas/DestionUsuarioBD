@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: jdcad
  * Date: 24/4/2026
@@ -8,86 +8,93 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace GestionUsuariosBD
 {
 	/// <summary>
-	/// Description of MainForm.
+	/// Formulario Principal para la gestión de usuarios.
 	/// </summary>
 	public partial class MainForm : Form
 	{
 		public MainForm()
 		{
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
 			InitializeComponent();
-			
-			CargarUsuarios(); // Al abrir el formulario, muestra la lista
+			CargarUsuarios();
 		}
 		
-		// Método para cargar todos los usuarios en el DataGridView
-        private void CargarUsuarios()
-        {
-            string sql = "SELECT Id, Nombre, Rol FROM Usuarios ORDER BY Nombre";
-            DataTable dt = DatabaseHelper.EjecutarConsulta(sql);
-            dgvUsuarios.DataSource = dt;
-        }
+		private void CargarUsuarios(string filtro = "")
+		{
+			string sql = "SELECT Id, Nombre, Rol FROM Usuarios";
+			Dictionary<string, object> param = null;
 
-        // Botón Agregar: abre el formulario de ingreso
-        private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            using (var formUsuario = new FormUsuario())
-            {
-                if (formUsuario.ShowDialog() == DialogResult.OK)
-                {
-                    CargarUsuarios(); // refrescar la lista
-                }
-            }
-        }
+			if (!string.IsNullOrEmpty(filtro))
+			{
+				sql += " WHERE Nombre LIKE @filtro";
+				param = new Dictionary<string, object> { { "@filtro", "%" + filtro + "%" } };
+			}
+			
+			sql += " ORDER BY Nombre";
+			DataTable dt = DatabaseHelper.EjecutarConsulta(sql, param);
+			dgvUsuarios.DataSource = dt;
+		}
 
-        // Botón Editar: permite modificar el usuario seleccionado
-        private void btnEditar_Click(object sender, EventArgs e)
-        {
-            if (dgvUsuarios.CurrentRow == null)
-            {
-                MessageBox.Show("Seleccione un usuario para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+		private void btnBuscar_Click(object sender, EventArgs e)
+		{
+			CargarUsuarios(txtBuscar.Text);
+		}
 
-            int id = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
-            string nombre = dgvUsuarios.CurrentRow.Cells["Nombre"].Value.ToString();
+		private void btnAgregar_Click(object sender, EventArgs e)
+		{
+			using (var formUsuario = new FormUsuario())
+			{
+				if (formUsuario.ShowDialog() == DialogResult.OK)
+				{
+					CargarUsuarios();
+				}
+			}
+		}
 
-            using (var formUsuario = new FormUsuario(id))
-            {
-                if (formUsuario.ShowDialog() == DialogResult.OK)
-                {
-                    CargarUsuarios();
-                }
-            }
-        }
+		private void btnEditar_Click(object sender, EventArgs e)
+		{
+			if (dgvUsuarios.CurrentRow == null)
+			{
+				MessageBox.Show("Seleccione un usuario para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				return;
+			}
 
-        // Botón Eliminar: borra el usuario seleccionado
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-            if (dgvUsuarios.CurrentRow == null)
-            {
-                MessageBox.Show("Seleccione un usuario para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+			int id = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
 
-            int id = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
-            string nombre = dgvUsuarios.CurrentRow.Cells["Nombre"].Value.ToString();
+			using (var formUsuario = new FormUsuario(id))
+			{
+				if (formUsuario.ShowDialog() == DialogResult.OK)
+				{
+					CargarUsuarios();
+				}
+			}
+		}
 
-            DialogResult dr = MessageBox.Show($"¿Está seguro de eliminar a '{nombre}'?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dr == DialogResult.Yes)
-            {
-                string sql = "DELETE FROM Usuarios WHERE Id = @id";
-                var param = new System.Collections.Generic.Dictionary<string, object> { { "@id", id } };
-                DatabaseHelper.EjecutarComando(sql, param);
-                CargarUsuarios();
-            }
+		private void btnEliminar_Click(object sender, EventArgs e)
+		{
+			if (dgvUsuarios.CurrentRow == null)
+			{
+				MessageBox.Show("Seleccione un usuario para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				return;
+			}
+
+			int id = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
+			string nombre = dgvUsuarios.CurrentRow.Cells["Nombre"].Value.ToString();
+
+			DialogResult dr = MessageBox.Show(string.Format("¿Está seguro de eliminar a '{0}'?", nombre), "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (dr == DialogResult.Yes)
+			{
+				string sql = "DELETE FROM Usuarios WHERE Id = @id";
+				var param = new Dictionary<string, object> { { "@id", id } };
+				DatabaseHelper.EjecutarComando(sql, param);
+				CargarUsuarios();
+			}
+		}
 	}
 }
